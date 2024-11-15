@@ -1,0 +1,173 @@
+<div class="destinos-container">
+    <div class="header">
+      <h1><i class="pi pi-map-marker"></i> Destinos Turísticos</h1>
+      <button pButton 
+        icon="pi pi-plus" 
+        (click)="nuevoDestino()"
+        class="p-button-text p-button-success">
+      </button>
+    </div>
+    <p class="header-description">Descubre lugares increíbles para tu próxima aventura</p>
+  
+    <div class="destinos-grid">
+      <div class="destino-card" *ngFor="let destino of destinos">
+        <p-card>
+          <ng-template pTemplate="header">
+            <div class="destino-imagen">
+              <div class="ubicacion-badge">
+                <i class="pi pi-map-marker"></i>
+                {{destino.ubicacion}}
+              </div>
+            </div>
+          </ng-template>
+  
+          <h2>{{destino.nombre}}</h2>
+          <p class="descripcion">{{destino.descripcion}}</p>
+          <div class="precio">
+            <span class="precio-label">Desde</span>
+            <span class="precio-valor">${{destino.precio}}</span>
+          </div>
+  
+          <ng-template pTemplate="footer">
+            <div class="action-buttons">
+              <button pButton 
+                icon="pi pi-eye" 
+                (click)="seleccionarDestino(destino)"
+                class="p-button-text p-button-info">
+              </button>
+              <button pButton 
+                icon="pi pi-pencil" 
+                (click)="editarDestino(destino)"
+                class="p-button-text p-button-warning">
+              </button>
+              <button pButton 
+                icon="pi pi-trash" 
+                (click)="eliminarDestino(destino.id)"
+                class="p-button-text p-button-danger">
+              </button>
+            </div>
+          </ng-template>
+        </p-card>
+      </div>
+    </div>
+  
+    <p-dialog 
+      [(visible)]="destinoDialog" 
+      [header]="editando ? 'Editar Destino' : 'Nuevo Destino'"
+      [modal]="true" 
+      [style]="{width: '450px'}"
+      [draggable]="false" 
+      [resizable]="false">
+      
+      <div class="p-fluid">
+        <div class="field">
+          <label for="nombre">Nombre</label>
+          <span class="p-input-icon-left">
+            <i class="pi pi-tag"></i>
+            <input type="text" 
+              pInputText 
+              id="nombre" 
+              [(ngModel)]="destino.nombre" 
+              placeholder="Ingrese el nombre del destino"
+              required>
+          </span>
+        </div>
+        
+        <div class="field">
+          <label for="ubicacion">Ubicación</label>
+          <span class="p-input-icon-left">
+            <i class="pi pi-map-marker"></i>
+            <input type="text" 
+              pInputText 
+              id="ubicacion" 
+              [(ngModel)]="destino.ubicacion" 
+              placeholder="Ingrese la ubicación"
+              required>
+          </span>
+        </div>
+        
+        <div class="field">
+          <label for="descripcion">Descripción</label>
+          <textarea 
+            pInputTextarea 
+            id="descripcion" 
+            [(ngModel)]="destino.descripcion" 
+            rows="3"
+            placeholder="Describa el destino turístico"
+            required>
+          </textarea>
+        </div>
+        
+        <div class="field">
+          <label for="precio">Precio</label>
+          <span class="p-input-icon-left">
+            <i class="pi pi-dollar"></i>
+            <p-inputNumber 
+              id="precio" 
+              [(ngModel)]="destino.precio" 
+              mode="currency" 
+              currency="USD"
+              placeholder="Ingrese el precio"
+              required>
+            </p-inputNumber>
+          </span>
+        </div>
+      </div>
+      
+      <ng-template pTemplate="footer">
+        <button pButton 
+          icon="pi pi-save"
+          (click)="guardarDestino()"
+          [disabled]="!destino.ubicacion || !destino.descripcion || !destino.precio"
+          class="p-button-success">
+        </button>
+      </ng-template>
+    </p-dialog>
+  
+    <p-dialog 
+      [(visible)]="mostrarDialogo" 
+      [modal]="true" 
+      [style]="{width: '500px'}" 
+      [draggable]="false" 
+      [resizable]="false">
+      <ng-template pTemplate="header">
+        <i class="pi pi-map-marker"></i> {{destinoSeleccionado?.nombre}}
+      </ng-template>
+      <div class="destino-detalle">
+        <div class="detalle-grid">
+          <div class="detalle-item">
+            <i class="pi pi-map"></i>
+            <div class="detalle-contenido">
+              <h3>Ubicación</h3>
+              <p>{{destinoSeleccionado?.ubicacion}}</p>
+            </div>
+          </div>
+          
+          <div class="detalle-item">
+            <i class="pi pi-dollar"></i>
+            <div class="detalle-contenido">
+              <h3>Precio por persona</h3>
+              <p>${{destinoSeleccionado?.precio}}</p>
+            </div>
+          </div>
+
+          <div class="detalle-item descripcion-item">
+            <i class="pi pi-info-circle"></i>
+            <div class="detalle-contenido">
+              <h3>Descripción</h3>
+              <p>{{destinoSeleccionado?.descripcion}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </p-dialog>
+</div>
+
+<p-toast></p-toast>
+
+<p-confirmDialog 
+    header="Confirmar Eliminación" 
+    icon="pi pi-exclamation-triangle"
+    acceptButtonStyleClass="p-button-danger"
+    rejectButtonStyleClass="p-button-text">
+</p-confirmDialog>

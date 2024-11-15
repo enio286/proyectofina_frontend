@@ -1,0 +1,171 @@
+<div class="table-wrapper">
+    <div class="header">
+      <h1><i class="pi pi-calendar"></i> Gestión de Reservas</h1>
+      <button pButton 
+        icon="pi pi-plus" 
+        (click)="nuevaReserva()"
+        class="p-button-text p-button-success">
+      </button>
+    </div>
+  
+    <p-table 
+      [value]="reservas" 
+      [loading]="loading"
+      styleClass="p-datatable-sm">
+      
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Cliente</th>
+          <th>Destino</th>
+          <th>Fecha Inicio</th>
+          <th>Fecha Fin</th>
+          <th>Estado</th>
+          <th>Precio Total</th>
+          <th>Acciones</th>
+        </tr>
+      </ng-template>
+      
+      <ng-template pTemplate="body" let-reserva>
+        <tr>
+          <td>{{reserva.cliente?.nombre}} {{reserva.cliente?.apellido}}</td>
+          <td>{{reserva.destino?.nombre}}</td>
+          <td>{{reserva.fecha_inicio | date:'dd/MM/yyyy'}}</td>
+          <td>{{reserva.fecha_fin | date:'dd/MM/yyyy'}}</td>
+          <td>
+            <span [class]="'estado-badge estado-' + reserva.estado">
+              {{reserva.estado}}
+            </span>
+          </td>
+          <td>${{reserva.precio_total}}</td>
+          <td>
+            <div class="action-buttons">
+              <button pButton 
+                icon="pi pi-pencil" 
+                (click)="editarReserva(reserva)"
+                class="p-button-text p-button-warning">
+              </button>
+              <button pButton 
+                icon="pi pi-trash" 
+                (click)="eliminarReserva(reserva.id)"
+                class="p-button-text p-button-danger">
+              </button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  
+    <p-dialog 
+      [(visible)]="reservaDialog" 
+      [header]="editando ? 'Editar Reserva' : 'Nueva Reserva'"
+      [modal]="true" 
+      [style]="{width: '450px'}"
+      [draggable]="false" 
+      [resizable]="false">
+      
+      <div class="p-fluid">
+        <div class="field">
+          <label for="cliente">Cliente</label>
+          <span class="p-input-icon-left">
+            <i class="pi pi-user"></i>
+            <p-dropdown 
+              [options]="clientes" 
+              [(ngModel)]="reserva.cliente_id" 
+              optionLabel="label" 
+              optionValue="value"
+              placeholder="Seleccione un cliente"
+              required>
+            </p-dropdown>
+          </span>
+        </div>
+        
+        <div class="field">
+          <label for="destino">Destino</label>
+          <span class="p-input-icon-left">
+            <i class="pi pi-map-marker"></i>
+            <p-dropdown 
+              [options]="destinos" 
+              [(ngModel)]="reserva.destino_id" 
+              optionLabel="label" 
+              optionValue="value"
+              placeholder="Seleccione un destino"
+              required>
+            </p-dropdown>
+          </span>
+        </div>
+        
+        <div class="field">
+          <label for="estado">Estado</label>
+          <span class="p-input-icon-left">
+            <i class="pi pi-tag"></i>
+            <p-dropdown 
+              [options]="estados" 
+              [(ngModel)]="reserva.estado" 
+              optionLabel="label" 
+              optionValue="value"
+              placeholder="Seleccione un estado"
+              required>
+            </p-dropdown>
+          </span>
+        </div>
+        
+        <div class="field" id="fecha-inicio">
+          <label for="fecha_inicio">Fecha Inicio</label>
+          <span class="p-input-icon-left">
+            <i class="pi pi-calendar"></i>
+            <p-calendar 
+              [(ngModel)]="reserva.fecha_inicio" 
+              dateFormat="dd/mm/yy"
+              placeholder="Seleccione fecha inicio"
+              required>
+            </p-calendar>
+          </span>
+        </div>
+        
+        <div class="field">
+          <label for="fecha_fin">Fecha Fin</label>
+          <span class="p-input-icon-left">
+            <i class="pi pi-calendar"></i>
+            <p-calendar 
+              [(ngModel)]="reserva.fecha_fin" 
+              dateFormat="dd/mm/yy"
+              placeholder="Seleccione fecha fin"
+              required>
+            </p-calendar>
+          </span>
+        </div>
+        
+        <div class="field">
+          <label for="precio_total">Precio Total</label>
+          <span class="p-input-icon-left">
+            <i class="pi pi-dollar"></i>
+            <p-inputNumber 
+              [(ngModel)]="reserva.precio_total" 
+              mode="currency" 
+              currency="USD"
+              placeholder="0.00"
+              required>
+            </p-inputNumber>
+          </span>
+        </div>
+      </div>
+  
+      <ng-template pTemplate="footer">
+        <button pButton 
+          icon="pi pi-save" 
+          (click)="guardarReserva()" 
+          [disabled]="!reserva.cliente_id || !reserva.destino_id || !reserva.fecha_inicio || !reserva.fecha_fin || !reserva.estado"
+          class="p-button-success">
+        </button>
+      </ng-template>
+    </p-dialog>
+  
+    <p-toast></p-toast>
+  
+    <p-confirmDialog 
+        header="Confirmar Eliminación" 
+        icon="pi pi-exclamation-triangle"
+        acceptButtonStyleClass="p-button-danger"
+        rejectButtonStyleClass="p-button-text">
+    </p-confirmDialog>
+  </div>

@@ -1,0 +1,153 @@
+<div class="table-wrapper">
+  <div class="header">
+    <h1><i class="pi pi-users"></i> Gestión de Clientes</h1>
+    <button pButton 
+      icon="pi pi-plus" 
+      (click)="nuevoCliente()"
+      class="p-button-text p-button-success">
+    </button>
+  </div>
+
+  <p-table 
+    [value]="clientes" 
+    [loading]="loading"
+    styleClass="p-datatable-sm">
+    
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Email</th>
+        <th>Teléfono</th>
+        <th>Pasaporte</th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+    
+    <ng-template pTemplate="body" let-cliente>
+      <tr>
+        <td>{{cliente?.nombre || 'N/A'}}</td>
+        <td>{{cliente?.apellido || 'N/A'}}</td>
+        <td>{{cliente?.email || 'N/A'}}</td>
+        <td>{{cliente?.telefono || 'N/A'}}</td>
+        <td>{{cliente?.pasaporte || 'N/A'}}</td>
+        <td>
+          <div class="action-buttons">
+            <button pButton 
+              icon="pi pi-pencil" 
+              (click)="editarCliente(cliente)"
+              class="p-button-text p-button-warning">
+            </button>
+            <button pButton 
+              icon="pi pi-trash" 
+              (click)="eliminarCliente(cliente.id)"
+              class="p-button-text p-button-danger">
+            </button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+    
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="6" style="text-align: center;">
+          No hay clientes disponibles
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog 
+  [(visible)]="clienteDialog" 
+  [header]="editando ? 'Editar Cliente' : 'Nuevo Cliente'"
+  [modal]="true" 
+  [style]="{width: '400px'}"
+  [draggable]="false" 
+  [resizable]="false">
+  
+  <div class="p-fluid">
+    <div class="field">
+      <label for="nombre">Nombre</label>
+      <span class="p-input-icon-left">
+        <i class="pi pi-user"></i>
+        <input type="text" 
+          pInputText 
+          id="nombre" 
+          [(ngModel)]="cliente.nombre" 
+          placeholder="Ingrese el nombre"
+          required>
+      </span>
+    </div>
+    
+    <div class="field">
+      <label for="apellido">Apellido</label>
+      <span class="p-input-icon-left">
+        <i class="pi pi-user"></i>
+        <input type="text" 
+          pInputText 
+          id="apellido" 
+          [(ngModel)]="cliente.apellido" 
+          placeholder="Ingrese el apellido"
+          required>
+      </span>
+    </div>
+    
+    <div class="field">
+      <label for="email">Email</label>
+      <span class="p-input-icon-left">
+        <i class="pi pi-envelope"></i>
+        <input type="email" 
+          pInputText 
+          id="email" 
+          [(ngModel)]="cliente.email" 
+          placeholder="ejemplo@correo.com"
+          required>
+      </span>
+    </div>
+    
+    <div class="field">
+      <label for="telefono">Teléfono</label>
+      <span class="p-input-icon-left">
+        <i class="pi pi-phone"></i>
+        <input type="text" 
+          pInputText 
+          id="telefono" 
+          [(ngModel)]="cliente.telefono" 
+          placeholder="+1 234 567 8900"
+          required>
+      </span>
+    </div>
+    
+    <div class="field">
+      <label for="pasaporte">Pasaporte</label>
+      <span class="p-input-icon-left">
+        <i class="pi pi-id-card"></i>
+        <input type="text" 
+          pInputText 
+          id="pasaporte" 
+          [(ngModel)]="cliente.pasaporte" 
+          placeholder="ABC123456"
+          required>
+      </span>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <button pButton 
+      icon="pi pi-save" 
+      (click)="guardarCliente()" 
+      [disabled]="!cliente.nombre || !cliente.apellido || !cliente.email || !cliente.telefono || !cliente.pasaporte"
+      class="p-button-success">
+    </button>
+  </ng-template>
+</p-dialog>
+
+<p-confirmDialog 
+    header="Confirmar Eliminación" 
+    icon="pi pi-exclamation-triangle"
+    acceptButtonStyleClass="p-button-danger"
+    rejectButtonStyleClass="p-button-text">
+</p-confirmDialog>
+
+<p-toast></p-toast>

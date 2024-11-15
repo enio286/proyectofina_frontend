@@ -1,0 +1,54 @@
+<div class="layout-wrapper">
+  <header class="layout-header" *ngIf="authService.isLoggedIn() && !isAuthRoute()">
+    <div class="header-content">
+      <div class="logo-container">
+        <img src="../assets/images/golden-mango-tour-high-resolution-logo-color-on-transparent-background.png" alt="Mangos Tour Logo" height="40" class="me-2">
+        <span class="company-name">Agencia de Turismo</span>
+      </div>
+      
+      <nav class="nav-menu">
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+          <i class="pi pi-home"></i>
+          <span>Inicio</span>
+        </a>
+        <a routerLink="/destinos" routerLinkActive="active">
+          <i class="pi pi-map-marker"></i>
+          <span>Destinos</span>
+        </a>
+        <a routerLink="/reservas" routerLinkActive="active">
+          <i class="pi pi-calendar"></i>
+          <span>Reservas</span>
+        </a>
+        <a routerLink="/clientes" routerLinkActive="active">
+          <i class="pi pi-users"></i>
+          <span>Clientes</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="layout-content">
+    <router-outlet></router-outlet>
+  </div>
+
+  <footer class="layout-footer" *ngIf="authService.isLoggedIn() && !isAuthRoute()">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>Sobre Nosotros</h3>
+        <p>Agencia de turismo especializada en crear experiencias únicas y memorables para nuestros clientes.</p>
+      </div>
+      <div class="footer-section">
+        <h3>Contacto</h3>
+        <p>Email: info&#64;agenciaturismo.com</p>
+        <p>Teléfono: +1 234 567 890</p>
+      </div>
+      <div class="footer-section">
+        <h3>Síguenos</h3>
+        <p>Encuentra las mejores ofertas en nuestras redes sociales.</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2024 Agencia de Turismo. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+</div>
